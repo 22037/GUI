@@ -16,7 +16,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import * 
 from PyQt5.QtGui import *
-import test_display2
+#import test_display2
 #
 
 class Ui_MainWindow(object):
@@ -111,7 +111,7 @@ class Ui_MainWindow(object):
         self.pushButton.clicked.connect(self.turnOn)
         self.pushButton_2.clicked.connect(self.test)
         self.pushButton_3.clicked.connect(self.test)
-        #self.pushButton_4.clicked.connect(self.display)
+        self.pushButton_4.clicked.connect(self.display)
         #self.pushButton_4.clicked.connect(self.turnOn)
 
     def turnOn(self):
@@ -127,8 +127,8 @@ class Ui_MainWindow(object):
 
     #Under construction
     def display(self):
-        #exec(open("test_display2.py").open())
-        self.label_4.setPixmap(QPixmap.test_display2.frame)
+        exec(open("test_display2.py").open())
+        #self.label_4.setPixmap(QPixmap.fromImage("test_display2".frame))
 
 #
 class camera(QThread):
