@@ -3,7 +3,7 @@ How to get Qt Designer
 1. Download Qt Designer
 https://build-system.fman.io/qt-designer-download
 2. Helpful tutorial which also shows the method of how to translate ui code into
-python code.
+python code near the end of the video.
 https://www.youtube.com/watch?v=FVpho_UiDAY
 
 Convert ui code to Python code
