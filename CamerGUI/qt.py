@@ -57,6 +57,22 @@ dps_measure_time = 5.0      # count frames for 5 sec
 last_time = time.perf_counter()
 last_display = time.perf_counter()
 
+
+#defining ports
+ports = [
+            p.device
+            for p in serial.tools.list_ports.comports()
+            if 'USB' in p.description
+        ]
+       
+if not ports:
+    raise IOError("There is no device exist on serial port!")
+   
+if len(ports) > 1:
+    warnings.warn('Connected....')
+    ser = serial.Serial(ports[0],9600)
+      
+#Port Detection END
 # MULTI-THREADING
 class Worker(QObject):
     finished = pyqtSignal()
@@ -67,6 +83,15 @@ class Worker(QObject):
         super(Worker, self).__init__()
         self.working = True
 
+    
+    def work(self):
+        while self.working:
+            line = ser.readline().decode('utf-8')
+            print(line)
+            time.sleep(0.05)
+            self.intReady.emit(line)
+        self.finished.emit()
+
 class qt(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
@@ -74,7 +99,8 @@ class qt(QMainWindow):
         self.thread = None
         self.worker = None
         self.pushButton.clicked.connect(self.start_loop)
-        self.label_11.setText("Not detected")
+        # self.label_11.setText("Not detected")
+        self.label_11.setText(ports[0])
         self.menuBar=self.menuBar()        
 
 
@@ -82,8 +108,8 @@ class qt(QMainWindow):
         print('Loop Finished')
 
     def start_loop(self):
-        self.portsetup()
-        if self.ports:           
+        # self.portsetup()
+        if ports:           
             self.worker = Worker()   # a new worker to perform those tasks
             self.thread = QThread()  # a new thread to run our background tasks in
             self.worker.moveToThread(self.thread)  # move the worker into the thread,do this first before connecting the signals
@@ -98,23 +124,23 @@ class qt(QMainWindow):
             self.thread.finished.connect(self.thread.deleteLater) # have thread mark itself for deletion
 
             self.thread.start()
-        if not self.ports:
+        if not ports:
             self.label_11.setText("Nothing found")
  
-    def portsetup(self):       
-        #Port Detection START
-        self.ports = [
-            p.device
-            for p in serial.tools.list_ports.comports()
-            if 'USB' in p.description
-        ]
+    # def portsetup(self):       
+    #     #Port Detection START
+    #     self.ports = [
+    #         p.device
+    #         for p in serial.tools.list_ports.comports()
+    #         if 'USB' in p.description
+    #     ]
        
-        if self.ports:
-            if len(self.ports) > 1:
-                warnings.warn('Connected....')
+    #     if self.ports:
+    #         if len(self.ports) > 1:
+    #             warnings.warn('Connected....')
 
-            ser = serial.Serial(self.ports[0],9600)
-            self.label_11.setText(self.ports[0])
+    #         ser = serial.Serial(self.ports[0],9600)
+    #         self.label_11.setText(self.ports[0])
 
 #Port Detection END
 
@@ -160,7 +186,7 @@ class qt(QMainWindow):
     def on_pushButton_3_clicked(self):
         # Send data from serial port:
         mytext = self.textEdit_2.toPlainText()
-        self.portsetup(self)
+        # self.portsetup(self)
         print(mytext.encode())
         self.ser.write(mytext.encode())
 
