@@ -190,7 +190,7 @@ class qt(QMainWindow):
         print(mytext.encode())
         self.ser.write(mytext.encode())
 
-    def on_pushButton_24_clicked(self):
+    def on_pushButton_25_clicked(self):
         self.thread = QThread() 
         self.camera = camera()
         self.camera.start()
@@ -198,9 +198,6 @@ class qt(QMainWindow):
 
     def ImageUpdateSlot(self, Image):
         self.label_49.setPixmap(QPixmap.fromImage(Image))
-
-
-
 
     def on_pushButton_23_clicked(self):
         measured_dps = 0.0          # displayed frames per second
@@ -243,6 +240,9 @@ class qt(QMainWindow):
                 self.label_49.setPixmap(QPixmap.fromImage(ConvertToQtFormat))
                 if (key == 27) or (key & 0xFF== ord('q')):
                     break
+    def on_pushButton_24_clicked(self):
+        self.label_49.clear()       
+
 
 #
 class camera(QThread):
