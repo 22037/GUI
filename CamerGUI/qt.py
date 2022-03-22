@@ -70,7 +70,7 @@ if not ports:
    
 if len(ports) > 1:
     warnings.warn('Connected....')
-    ser = serial.Serial(ports[0],9600)
+ser = serial.Serial(ports[0],9600)
       
 #Port Detection END
 # MULTI-THREADING
